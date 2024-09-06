@@ -68,6 +68,12 @@ h1 {
     color: #006064;
 }
 
+#saved-list {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margins */
+}
+
 #saved-list li {
     background-color: var(--entry-bg);
     padding: 10px;
@@ -219,4 +225,24 @@ textarea {
 
 #entries-list .entry:hover {
     transform: scale(1.02);
+}
+
+/* Приховування поля завантаження файлу */
+label.import-btn {
+    display: inline-block;
+    background-color: var(--button-bg);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+label.import-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+#file-input {
+    display: none;
 }

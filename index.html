@@ -6,11 +6,15 @@
     <title>Трекер Часу</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Підключення бібліотеки для роботи з Excel -->
 </head>
 <body>
 <div class="profile-container">
     <h2>Збережені результати</h2>
     <ul id="saved-list"></ul>
+
+    <!-- Кнопки для експорту та імпорту -->
+    <button class="btn export-btn" onclick="exportToExcel()">Експортувати в Excel</button>
 </div>
 
 <!-- Перемикач теми -->

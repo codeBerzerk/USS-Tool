@@ -2,6 +2,7 @@ let entries = [];
 let savedResults = JSON.parse(localStorage.getItem('savedResults')) || [];
 let inputMode = 'single';
 
+/* Перемикання між режимами вводу */
 function toggleInputMode() {
     const singleInputSection = document.getElementById('single-input');
     const bulkInputSection = document.getElementById('bulk-input');
@@ -20,6 +21,7 @@ function toggleInputMode() {
     }
 }
 
+/* Додавання нових рядків */
 function addEntry() {
     const startTime = document.getElementById('start-time').value;
     const endTime = document.getElementById('end-time').value;
@@ -65,38 +67,9 @@ function displayEntries() {
             <div>Рядок ${index + 1}: ${entry.startTime} - ${entry.endTime}</div>
             <div>
                 <span>Тривалість: ${duration.hours} годин ${duration.minutes} хвилин</span>
-                <img src="edit-icon.svg" class="icon edit" onclick="editEntry(${index})" alt="Редагувати">
-                <img src="delete-icon.svg" class="icon delete" onclick="deleteEntry(${index})" alt="Видалити">
             </div>
         </div>`;
     });
-}
-
-function editEntry(index) {
-    const startTime = prompt("Введіть новий час початку (формат ГГ:ХХ)", entries[index].startTime);
-    const endTime = prompt("Введіть новий час закінчення (формат ГГ:ХХ)", entries[index].endTime);
-    if (validateTimes(startTime, endTime)) {
-        entries[index] = { startTime, endTime };
-        displayEntries();
-    } else {
-        alert("Будь ласка, введіть коректні часи.");
-    }
-}
-
-function deleteEntry(index) {
-    entries.splice(index, 1);
-    displayEntries();
-}
-
-function calculateTotal() {
-    let totalMinutes = 0;
-    entries.forEach(entry => {
-        const duration = calculateDuration(entry.startTime, entry.endTime);
-        totalMinutes += (duration.hours * 60 + duration.minutes);
-    });
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    document.getElementById('total-time').innerText = `Результат: ${hours} годин ${minutes} хвилин`;
 }
 
 function calculateDuration(startTime, endTime) {
@@ -167,6 +140,35 @@ function deleteResult(index) {
     savedResults.splice(index, 1);
     localStorage.setItem('savedResults', JSON.stringify(savedResults));
     loadSavedResults();
+}
+
+/* Експорт в Excel */
+function exportToExcel() {
+    const worksheet = XLSX.utils.json_to_sheet(savedResults);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Збережені результати");
+    const wscols = [
+        {wch: 30}, // Ширина колонки "Назва"
+        {wch: 40}, // Ширина колонки "totalTime"
+    ];
+    worksheet['!cols'] = wscols; // Встановлення ширини колонок
+    XLSX.writeFile(workbook, "збережені_результати.xlsx");
+}
+
+/* Імпорт з Excel */
+function importFromExcel(event) {
+    const input = event.target;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const importedResults = XLSX.utils.sheet_to_json(firstSheet);
+        savedResults = importedResults;
+        localStorage.setItem('savedResults', JSON.stringify(savedResults));
+        loadSavedResults();
+    };
+    reader.readAsArrayBuffer(input.files[0]);
 }
 
 function openModal(index) {
