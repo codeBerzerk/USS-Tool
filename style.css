@@ -1,0 +1,222 @@
+/* CSS змінні для тем */
+:root {
+    --bg-color: #f0f4f7;
+    --container-bg: #e0f7fa;
+    --text-color: #333;
+    --button-bg: #26a69a;
+    --button-hover-bg: #00796b;
+    --entry-bg: #b2ebf2;
+    --entry-hover-bg: #80deea;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+body.dark-theme {
+    --bg-color: #303030;
+    --container-bg: #424242;
+    --text-color: #f5f5f5;
+    --button-bg: #00796b;
+    --button-hover-bg: #004d40;
+    --entry-bg: #546e7a;
+    --entry-hover-bg: #37474f;
+}
+
+/* Контейнер калькулятора */
+.container {
+    background-color: var(--container-bg);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    text-align: center;
+}
+
+/* Заголовок */
+h1 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #006064;
+}
+
+/* Блок збережених результатів */
+.profile-container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.profile-container h2 {
+    text-align: center;
+    color: #006064;
+}
+
+#saved-list li {
+    background-color: var(--entry-bg);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#saved-list li:hover {
+    transform: scale(1.05);
+    background-color: var(--entry-hover-bg);
+}
+
+/* Іконки редагування та видалення */
+.icon {
+    width: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Кнопки */
+button.btn {
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button.btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+button.toggle-btn {
+    background-color: var(--button-bg);
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+button.toggle-btn:hover {
+    background-color: var(--button-hover-bg);
+}
+
+button.save-btn, .delete-btn {
+    margin-top: 10px;
+}
+
+/* Перемикач теми */
+.theme-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-switcher:hover {
+    transform: scale(1.1);
+}
+
+/* Виведення часу */
+.total-time {
+    font-weight: 600;
+    margin-top: 20px;
+    text-align: center;
+    color: #004d40;
+    font-size: 20px;
+}
+
+/* Стиль модального вікна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content .close {
+    align-self: flex-end;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--button-bg);
+}
+
+.modal-content .total-time {
+    color: #004d40;
+    font-size: 18px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 500;
+}
+
+/* Поля вводу */
+.input-section {
+    display: flex;
+    margin-top: 20px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #b2dfdb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    border-color: #80cbc4;
+    outline: none;
+}
+
+textarea {
+    resize: none;
+}
+
+/* Стиль для списку інтервалів */
+#entries-list .entry {
+    background-color: var(--entry-bg);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+#entries-list .entry:hover {
+    transform: scale(1.02);
+}
