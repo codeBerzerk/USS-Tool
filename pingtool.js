@@ -7,11 +7,12 @@
         pingToolInitialized = true;
 
         const sites = [
-            { name: "USS", url: "https://uss.gov.ua/" },
-            { name: "NGU", url: "https://ngu.gov.ua/" },
             { name: "DMSU", url: "https://dmsu.gov.ua/" },
-            { name: "RESTORATION", url: "https://restoration.gov.ua/" },
             { name: "MAIL DMSU", url: "https://mail.dmsu.gov.ua/mail/" },
+            { name: "MAIL DMSU", url: "https://rtg.dmsu.gov.ua" },
+            { name: "NGU", url: "https://ngu.gov.ua/" },
+            { name: "USS", url: "https://uss.gov.ua/" },
+            { name: "RESTORATION", url: "https://restoration.gov.ua/" },
             { name: "PROMETHEUS", url: "https://prometheus.io/" },
             { name: "NKAU", url: "https://www.nkau.gov.ua/ua/" },
         ];
