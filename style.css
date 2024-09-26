@@ -1,4 +1,4 @@
-/* CSS змінні для тем */
+/* Основні змінні */
 :root {
     --bg-color: #f0f4f7;
     --container-bg: #e0f7fa;
@@ -7,18 +7,23 @@
     --button-hover-bg: #00796b;
     --entry-bg: #b2ebf2;
     --entry-hover-bg: #80deea;
+    --error-color: #e57373;
+    --success-color: #88ca5e;
+    --warning-color: #f4e285;
+    --beta-color: red;
+}
+
+/* Скидання стилів та базові налаштування */
+* {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 body.dark-theme {
@@ -31,25 +36,202 @@ body.dark-theme {
     --entry-hover-bg: #37474f;
 }
 
-/* Контейнер калькулятора */
+/* Навігація */
+header {
+    background-color: var(--container-bg);
+    padding: 20px 0;
+}
+
+.navigation {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.navigation li {
+    margin: 0 20px;
+}
+
+.navigation li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.navigation li a.active {
+    border-bottom: 3px solid var(--button-bg);
+}
+
+.navigation li a:hover {
+    background-color: var(--entry-hover-bg);
+    border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+    .navigation li {
+        margin: 0 10px;
+    }
+
+    .navigation li a {
+        font-size: 16px;
+    }
+}
+
+/* Контейнер для обох розділів */
+main {
+    padding: 20px;
+}
+
 .container {
     background-color: var(--container-bg);
     border-radius: 15px;
     padding: 30px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    width: 500px;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
     text-align: center;
 }
 
-/* Заголовок */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        width: 90%;
+    }
+}
+
+/* Заголовки */
 h1 {
     font-size: 28px;
-    text-align: center;
     margin-bottom: 20px;
     color: #006064;
 }
 
-/* Блок збережених результатів */
+h2 {
+    color: #006064;
+    margin-top: 20px;
+}
+
+/* Кнопки */
+button {
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px 0;
+}
+
+button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button.calculate-btn {
+    margin-top: 20px;
+}
+
+button.save-btn {
+    margin-top: 10px;
+}
+
+button.export-btn {
+    width: 100%;
+}
+
+/* Перемикач теми */
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-switcher:hover {
+    transform: scale(1.1);
+}
+
+/* Стилі для пінгувалки */
+.site-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+    border-radius: 8px;
+    background-color: var(--entry-bg);
+    transition: background-color 0.5s ease;
+}
+
+.available { background-color: var(--success-color); }
+.unavailable { background-color: var(--error-color); }
+.checking { background-color: var(--warning-color); }
+.error { background-color: var(--error-color); }
+
+.beta {
+    color: var(--beta-color);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+select {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #b2dfdb;
+    border-radius: 8px;
+    background-color: white;
+    width: 100%;
+    max-width: 200px;
+}
+
+/* Стилі для списку сайтів */
+#sitesList .site-block {
+    /*background-color: var(--entry-bg);*/
+}
+
+/* Стилі для сповіщень */
+.notification {
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    min-width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification button.close-notification {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.notification button.close-notification:hover {
+    color: #ccc;
+}
+
+#sitesList .site-block button {
+    margin-top: 10px;
+}
+
+/* Інші стилі */
 .profile-container {
     background-color: #ffffff;
     border-radius: 15px;
@@ -63,15 +245,19 @@ h1 {
     top: 0;
 }
 
+body.dark-theme .profile-container {
+    background-color: var(--container-bg);
+}
+
 .profile-container h2 {
     text-align: center;
     color: #006064;
 }
 
 #saved-list {
-    list-style-type: none; /* Remove bullets */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margins */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 #saved-list li {
@@ -79,9 +265,6 @@ h1 {
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -91,65 +274,66 @@ h1 {
     background-color: var(--entry-hover-bg);
 }
 
-/* Іконки редагування та видалення */
-.icon {
-    width: 20px;
-    cursor: pointer;
-    margin-left: 10px;
+@media (max-width: 600px) {
+    .profile-container {
+        position: static;
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    main {
+        padding-top: 0;
+    }
 }
 
-/* Кнопки */
-button.btn {
-    background-color: var(--button-bg);
-    color: white;
-    border: none;
-    padding: 15px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* Поля вводу */
+.input-section {
+    display: flex;
+    margin-top: 20px;
+}
+
+.input-section input, .input-section textarea {
     width: 100%;
-}
-
-button.btn:hover {
-    background-color: var(--button-hover-bg);
-}
-
-button.toggle-btn {
-    background-color: var(--button-bg);
-    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #b2dfdb;
+    border-radius: 8px;
     font-size: 16px;
-}
-
-button.toggle-btn:hover {
-    background-color: var(--button-hover-bg);
-}
-
-button.save-btn, .delete-btn {
-    margin-top: 10px;
-}
-
-/* Перемикач теми */
-.theme-switcher {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
     transition: all 0.3s ease;
+    margin-right: 10px;
 }
 
-.theme-switcher:hover {
-    transform: scale(1.1);
+.input-section input:focus, .input-section textarea:focus {
+    border-color: #80cbc4;
+    outline: none;
 }
 
-/* Виведення часу */
-.total-time {
-    font-weight: 600;
-    margin-top: 20px;
-    text-align: center;
-    color: #004d40;
-    font-size: 20px;
+.input-section textarea {
+    resize: none;
+}
+
+@media (max-width: 600px) {
+    .input-section {
+        flex-direction: column;
+    }
+
+    .input-section input, .input-section textarea {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* Стиль для списку інтервалів */
+#entries-list .entry {
+    background-color: var(--entry-bg);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+#entries-list .entry:hover {
+    transform: scale(1.02);
 }
 
 /* Стиль модального вікна */
@@ -164,6 +348,7 @@ button.save-btn, .delete-btn {
     padding: 30px;
     border-radius: 10px;
     width: 350px;
+    max-width: 90%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -190,59 +375,10 @@ button.save-btn, .delete-btn {
     z-index: 500;
 }
 
-/* Поля вводу */
-.input-section {
-    display: flex;
+.total-time {
+    font-weight: 600;
     margin-top: 20px;
-}
-
-input, textarea {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #b2dfdb;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-
-input:focus, textarea:focus {
-    border-color: #80cbc4;
-    outline: none;
-}
-
-textarea {
-    resize: none;
-}
-
-/* Стиль для списку інтервалів */
-#entries-list .entry {
-    background-color: var(--entry-bg);
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-}
-
-#entries-list .entry:hover {
-    transform: scale(1.02);
-}
-
-/* Приховування поля завантаження файлу */
-label.import-btn {
-    display: inline-block;
-    background-color: var(--button-bg);
-    color: white;
-    padding: 15px;
     text-align: center;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-label.import-btn:hover {
-    background-color: var(--button-hover-bg);
-}
-
-#file-input {
-    display: none;
+    color: #004d40;
+    font-size: 20px;
 }

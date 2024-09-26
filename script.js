@@ -2,6 +2,18 @@ let entries = [];
 let savedResults = JSON.parse(localStorage.getItem('savedResults')) || [];
 let inputMode = 'single';
 
+// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    // Запит на дозвіл сповіщень
+    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('Дозвіл на сповіщення надано.');
+            }
+        });
+    }
+});
+
 /* Перемикання між режимами вводу */
 function toggleInputMode() {
     const singleInputSection = document.getElementById('single-input');
@@ -90,6 +102,17 @@ function calculateDuration(startTime, endTime) {
     return { hours, minutes };
 }
 
+function calculateTotal() {
+    let totalMinutes = 0;
+    entries.forEach(entry => {
+        const duration = calculateDuration(entry.startTime, entry.endTime);
+        totalMinutes += duration.hours * 60 + duration.minutes;
+    });
+    const totalHours = Math.floor(totalMinutes / 60);
+    const totalRemainingMinutes = totalMinutes % 60;
+    document.getElementById('total-time').innerText = `Загальний час: ${totalHours} годин ${totalRemainingMinutes} хвилин`;
+}
+
 function saveResult() {
     const resultName = prompt("Назвіть цей результат:");
     if (resultName && entries.length > 0) {
@@ -117,58 +140,10 @@ function loadSavedResults() {
         const li = document.createElement('li');
         li.innerHTML = `
             <span>${result.name}</span>
-            <div>
-                <img src="edit-icon.svg" class="icon" onclick="renameResult(${index})" alt="Перейменувати">
-                <img src="delete-icon.svg" class="icon" onclick="deleteResult(${index})" alt="Видалити">
-            </div>
         `;
         li.onclick = () => openModal(index);
         savedList.appendChild(li);
     });
-}
-
-function renameResult(index) {
-    const newName = prompt("Нове ім'я для результату:", savedResults[index].name);
-    if (newName) {
-        savedResults[index].name = newName;
-        localStorage.setItem('savedResults', JSON.stringify(savedResults));
-        loadSavedResults();
-    }
-}
-
-function deleteResult(index) {
-    savedResults.splice(index, 1);
-    localStorage.setItem('savedResults', JSON.stringify(savedResults));
-    loadSavedResults();
-}
-
-/* Експорт в Excel */
-function exportToExcel() {
-    const worksheet = XLSX.utils.json_to_sheet(savedResults);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Збережені результати");
-    const wscols = [
-        {wch: 30}, // Ширина колонки "Назва"
-        {wch: 40}, // Ширина колонки "totalTime"
-    ];
-    worksheet['!cols'] = wscols; // Встановлення ширини колонок
-    XLSX.writeFile(workbook, "збережені_результати.xlsx");
-}
-
-/* Імпорт з Excel */
-function importFromExcel(event) {
-    const input = event.target;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const importedResults = XLSX.utils.sheet_to_json(firstSheet);
-        savedResults = importedResults;
-        localStorage.setItem('savedResults', JSON.stringify(savedResults));
-        loadSavedResults();
-    };
-    reader.readAsArrayBuffer(input.files[0]);
 }
 
 function openModal(index) {
@@ -190,22 +165,44 @@ function closeModal() {
     document.getElementById('overlay').style.display = 'none';
 }
 
+function exportToExcel() {
+    const worksheetData = savedResults.map(result => ({
+        'Назва': result.name,
+        'Загальний час': result.totalTime,
+        'Деталі': result.entries.map(entry => `${entry.startTime} - ${entry.endTime}`).join('; ')
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Збережені результати");
+    XLSX.writeFile(workbook, "збережені_результати.xlsx");
+}
+
 /* Перемикач теми */
 function toggleTheme() {
     document.body.classList.toggle('dark-theme');
     const themeIcon = document.getElementById('theme-switcher');
     themeIcon.textContent = document.body.classList.contains('dark-theme') ? '🌙' : '🌞';
+    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
 }
 
 /* Відслідковування системної теми користувача */
 function detectSystemTheme() {
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (prefersDarkScheme) {
-        document.body.classList.add('dark-theme');
-        document.getElementById('theme-switcher').textContent = '🌙';
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-switcher').textContent = '🌙';
+        }
     } else {
-        document.body.classList.remove('dark-theme');
-        document.getElementById('theme-switcher').textContent = '🌞';
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDarkScheme) {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-switcher').textContent = '🌙';
+        } else {
+            document.body.classList.remove('dark-theme');
+            document.getElementById('theme-switcher').textContent = '🌞';
+        }
     }
 }
 
@@ -213,3 +210,30 @@ window.onload = () => {
     loadSavedResults();
     detectSystemTheme();
 };
+
+/* Код для перемикання вкладок та ініціалізації пінгувалки */
+document.addEventListener('DOMContentLoaded', () => {
+    const calculatorTab = document.getElementById('calculatorTab');
+    const pingToolTab = document.getElementById('pingToolTab');
+    const calculatorSection = document.getElementById('calculatorSection');
+    const pingToolSection = document.getElementById('pingToolSection');
+
+    calculatorTab.addEventListener('click', (e) => {
+        e.preventDefault();
+        calculatorTab.classList.add('active');
+        pingToolTab.classList.remove('active');
+        calculatorSection.style.display = 'block';
+        pingToolSection.style.display = 'none';
+    });
+
+    pingToolTab.addEventListener('click', (e) => {
+        e.preventDefault();
+        calculatorTab.classList.remove('active');
+        pingToolTab.classList.add('active');
+        calculatorSection.style.display = 'none';
+        pingToolSection.style.display = 'block';
+
+        // Ініціалізація пінгувалки
+        initPingTool();
+    });
+});

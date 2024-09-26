@@ -3,73 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Трекер Часу</title>
+    <title>Трекер Часу та Перевірка доступності сайтів</title>
+    <!-- Підключення шрифтів та стилів -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Об'єднаний файл стилів -->
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script> <!-- Підключення бібліотеки для роботи з Excel -->
+    <!-- Підключення бібліотеки для роботи з Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 <body>
-<div class="profile-container">
-    <h2>Збережені результати</h2>
-    <ul id="saved-list"></ul>
-
-    <!-- Кнопки для експорту та імпорту -->
-    <button class="btn export-btn" onclick="exportToExcel()">Експортувати в Excel</button>
-</div>
-
 <!-- Перемикач теми -->
 <div class="theme-switcher" id="theme-switcher" onclick="toggleTheme()">🌞</div>
 
-<div class="container">
-    <h1>Трекер Часу</h1>
-
-    <!-- Інструкція -->
-    <div class="instruction">
-        <p>
-            Виберіть один із двох режимів вводу часу:
-        <ul>
-            <li><b>Рядковий ввід:</b> Введіть час початку і закінчення для одного інтервалу.</li>
-            <li><b>Масовий ввід:</b> Введіть декілька інтервалів у форматі "ГГ:ХХ - ГГ:ХХ" через новий рядок.</li>
+<!-- Хедер з навігацією -->
+<header>
+    <nav>
+        <ul class="navigation">
+            <li><a href="#" id="calculatorTab" class="active">Трекер Часу</a></li>
+            <li><a href="#" id="pingToolTab">Перевірка доступності сайтів</a></li>
         </ul>
-        Після додавання рядків, натисніть "Вивести результат", щоб отримати суму всіх інтервалів часу.
-        </p>
-    </div>
+    </nav>
+</header>
 
-    <!-- Перемикання режиму вводу -->
-    <button class="btn toggle-btn" onclick="toggleInputMode()">Перемкнути на масовий ввід</button>
+<!-- Основний контент -->
+<main>
+    <!-- Розділ калькулятора -->
+    <section id="calculatorSection">
+        <!-- Початок коду калькулятора -->
+        <div class="profile-container">
+            <h2>Збережені результати</h2>
+            <ul id="saved-list"></ul>
 
-    <!-- Режим одиничного вводу -->
-    <div id="single-input" class="input-section">
-        <input type="time" id="start-time" required>
-        <input type="time" id="end-time" required>
-        <button class="btn" onclick="addEntry()">Додати рядок</button>
-    </div>
+            <!-- Кнопки для експорту та імпорту -->
+            <button class="btn export-btn" onclick="exportToExcel()">Експортувати в Excel</button>
+        </div>
 
-    <!-- Режим масового вводу -->
-    <div id="bulk-input" class="input-section" style="display: none;">
-        <textarea id="bulk-text" rows="6" placeholder="Введіть часи через новий рядок..."></textarea>
-        <button class="btn" onclick="addBulkEntries()">Додати рядки</button>
-    </div>
+        <div class="container">
+            <h1>Трекер Часу</h1>
 
-    <!-- Виведення результатів -->
-    <div id="entries-list"></div>
-    <div id="total-time" class="total-time"></div>
-    <button class="btn calculate-btn" onclick="calculateTotal()">Вивести результат</button>
+            <!-- Інструкція -->
+            <div class="instruction">
+                <p>
+                    Виберіть один із двох режимів вводу часу:
+                <ul>
+                    <li><b>Рядковий ввід:</b> Введіть час початку і закінчення для одного інтервалу.</li>
+                    <li><b>Масовий ввід:</b> Введіть декілька інтервалів у форматі "ГГ:ХХ - ГГ:ХХ" через новий рядок.</li>
+                </ul>
+                Після додавання рядків, натисніть "Вивести результат", щоб отримати суму всіх інтервалів часу.
+                </p>
+            </div>
 
-    <!-- Збереження результатів -->
-    <button class="btn save-btn" onclick="saveResult()">Зберегти результат</button>
-</div>
+            <!-- Перемикання режиму вводу -->
+            <button class="btn toggle-btn" onclick="toggleInputMode()">Перемкнути на масовий ввід</button>
 
-<!-- Модальне вікно -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div id="modal-content-details"></div>
-    </div>
-</div>
+            <!-- Режим одиничного вводу -->
+            <div id="single-input" class="input-section">
+                <input type="time" id="start-time" required>
+                <input type="time" id="end-time" required>
+                <button class="btn" onclick="addEntry()">Додати рядок</button>
+            </div>
 
-<div id="overlay" class="overlay"></div>
+            <!-- Режим масового вводу -->
+            <div id="bulk-input" class="input-section" style="display: none;">
+                <textarea id="bulk-text" rows="6" placeholder="Введіть часи через новий рядок..."></textarea>
+                <button class="btn" onclick="addBulkEntries()">Додати рядки</button>
+            </div>
 
+            <!-- Виведення результатів -->
+            <div id="entries-list"></div>
+            <div id="total-time" class="total-time"></div>
+            <button class="btn calculate-btn" onclick="calculateTotal()">Вивести результат</button>
+
+            <!-- Збереження результатів -->
+            <button class="btn save-btn" onclick="saveResult()">Зберегти результат</button>
+        </div>
+
+        <!-- Модальне вікно -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="modal-content-details"></div>
+            </div>
+        </div>
+
+        <div id="overlay" class="overlay"></div>
+        <!-- Кінець коду калькулятора -->
+    </section>
+
+    <!-- Розділ пінгувалки -->
+    <section id="pingToolSection" style="display: none;">
+        <!-- Початок коду пінгувалки -->
+        <div class="container">
+            <h1>Перевірка доступності сайтів</h1>
+
+            <select id="intervalSelect">
+                <option value="5000">5 секунд</option>
+                <option value="15000">15 секунд</option>
+                <option value="30000">30 секунд</option>
+                <option value="60000">1 хвилина</option>
+                <option value="300000">5 хвилин</option>
+            </select>
+
+            <h2>Список сайтів</h2>
+            <div id="sitesList"></div>
+
+            <div id="errorHistory">
+                <h2>Історія помилок
+                    <span class="beta">BETA</span>
+                </h2>
+                <ul id="errorList"></ul>
+                <button id="clearHistoryBtn">Очистити історію</button>
+            </div>
+        </div>
+        <!-- Кінець коду пінгувалки -->
+    </section>
+</main>
+<!-- Звуковий сигнал -->
+<audio id="alert-sound" src="sounds/alert.mp3" preload="auto"></audio>
+
+<!-- Підключаємо скрипти -->
 <script src="script.js"></script>
+<script src="pingtool.js"></script>
 </body>
 </html>
