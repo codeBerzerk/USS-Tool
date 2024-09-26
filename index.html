@@ -17,11 +17,19 @@
 
 <!-- Хедер з навігацією -->
 <header>
-    <nav>
-        <ul class="navigation">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#">USS TOOLS</a>
+        </div>
+        <ul class="navigation" id="nav-menu">
             <li><a href="#" id="calculatorTab" class="active">Трекер Часу</a></li>
             <li><a href="#" id="pingToolTab">Перевірка доступності сайтів</a></li>
         </ul>
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
     </nav>
 </header>
 
@@ -124,5 +132,24 @@
 <!-- Підключаємо скрипти -->
 <script src="script.js"></script>
 <script src="pingtool.js"></script>
+<script>
+    // JavaScript для бургер меню
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Закрити меню при кліку на посилання
+    const navLinks = document.querySelectorAll('.navigation li a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+</script>
 </body>
 </html>

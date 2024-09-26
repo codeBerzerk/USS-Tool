@@ -40,12 +40,35 @@ body.dark-theme {
 header {
     background-color: var(--container-bg);
     padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Забезпечує, що хедер завжди зверху */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .navigation {
     list-style: none;
     display: flex;
     justify-content: center;
+    align-items: center;
+    transition: max-height 0.3s ease;
 }
 
 .navigation li {
@@ -70,19 +93,78 @@ header {
     border-radius: 5px;
 }
 
-@media (max-width: 600px) {
+/* Стилі для бургер меню */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1100; /* Підвищуємо z-index для бургер меню */
+}
+
+.hamburger .bar {
+    height: 3px;
+    width: 25px;
+    background-color: var(--text-color);
+    margin: 4px 0;
+    transition: all 0.3s ease;
+}
+
+/* Анімація бургер меню при активному стані */
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Адаптивність навігації */
+@media (max-width: 800px) {
+    .navigation {
+        position: fixed;
+        top: 70px; /* Висота хедера */
+        left: 0;
+        right: 0;
+        background-color: var(--container-bg);
+        flex-direction: column;
+        align-items: center;
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .navigation.active {
+        max-height: 300px; /* Достатньо для всіх пунктів навігації */
+    }
+
     .navigation li {
-        margin: 0 10px;
+        margin: 15px 0;
     }
 
     .navigation li a {
         font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    .hamburger {
+        display: flex;
     }
 }
 
 /* Контейнер для обох розділів */
 main {
-    padding: 20px;
+    padding: 100px 20px 20px 20px; /* Враховуємо висоту хедера */
+    margin-left: 0; /* Виправляємо проблеми з відступами */
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 800px) {
+    main {
+        margin-left: 0;
+    }
 }
 
 .container {
@@ -113,6 +195,16 @@ h1 {
 h2 {
     color: #006064;
     margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
 }
 
 /* Кнопки */
@@ -148,6 +240,10 @@ button.export-btn {
     width: 100%;
 }
 
+button.toggle-btn {
+    margin-bottom: 20px;
+}
+
 /* Перемикач теми */
 .theme-switcher {
     position: fixed;
@@ -156,6 +252,7 @@ button.export-btn {
     font-size: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
+    z-index: 1200; /* Забезпечує, що перемикач теми завжди зверху */
 }
 
 .theme-switcher:hover {
@@ -208,7 +305,10 @@ select {
     padding: 15px 20px;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1100; /* Підвищуємо z-index для сповіщень */
     min-width: 250px;
     display: flex;
     justify-content: space-between;
@@ -243,6 +343,7 @@ select {
     position: fixed;
     left: 0;
     top: 0;
+    z-index: 1000; /* Додаємо z-index для профільного контейнера */
 }
 
 body.dark-theme .profile-container {
@@ -274,16 +375,132 @@ body.dark-theme .profile-container {
     background-color: var(--entry-hover-bg);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .profile-container {
-        position: static;
         width: 100%;
+        position: static;
         height: auto;
         margin-bottom: 20px;
+        box-shadow: none; /* Приховуємо тінь для більш чистого вигляду */
     }
 
+    /* Зменшуємо padding основного контейнера */
+    .container {
+        padding: 20px;
+        width: 90%;
+    }
+
+    /* Перемикаємо навігацію вертикально */
+    .navigation {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navigation li {
+        margin: 10px 0;
+    }
+
+    .navigation li a {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    /* Основний контент без лівого відступу */
     main {
-        padding-top: 0;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Поля вводу */
+    .input-section {
+        flex-direction: column;
+    }
+
+    .input-section input,
+    .input-section textarea {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Заголовки */
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    /* Кнопки */
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    /* Перемикач режимів вводу */
+    .toggle-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    /* Інструкція */
+    .instruction {
+        font-size: 14px;
+    }
+
+    /* Список записів */
+    #entries-list .entry {
+        padding: 12px;
+    }
+
+    /* Вивід загального часу */
+    .total-time {
+        font-size: 18px;
+    }
+
+    /* Модальне вікно */
+    .modal {
+        width: 90%;
+        padding: 20px;
+    }
+
+    /* Сповіщення */
+    .notification {
+        min-width: 200px;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .notification button.close-notification {
+        font-size: 18px;
+    }
+
+    /* Список помилок */
+    #errorHistory h2 {
+        font-size: 18px;
+    }
+
+    #errorHistory li {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Профільний контейнер: Зменшення розміру тексту та елементів */
+    .profile-container h2 {
+        font-size: 18px;
+    }
+
+    #saved-list li {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Загальний відступ між елементами */
+    .container, .profile-container {
+        margin: 0 auto;
     }
 }
 
@@ -293,7 +510,8 @@ body.dark-theme .profile-container {
     margin-top: 20px;
 }
 
-.input-section input, .input-section textarea {
+.input-section input,
+.input-section textarea {
     width: 100%;
     padding: 15px;
     border: 1px solid #b2dfdb;
@@ -303,24 +521,14 @@ body.dark-theme .profile-container {
     margin-right: 10px;
 }
 
-.input-section input:focus, .input-section textarea:focus {
+.input-section input:focus,
+.input-section textarea:focus {
     border-color: #80cbc4;
     outline: none;
 }
 
 .input-section textarea {
     resize: none;
-}
-
-@media (max-width: 600px) {
-    .input-section {
-        flex-direction: column;
-    }
-
-    .input-section input, .input-section textarea {
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
 }
 
 /* Стиль для списку інтервалів */
@@ -340,7 +548,7 @@ body.dark-theme .profile-container {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 1200; /* Підвищуємо z-index для уникнення перекриття */
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -372,7 +580,7 @@ body.dark-theme .profile-container {
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 500;
+    z-index: 1100;
 }
 
 .total-time {
@@ -381,4 +589,14 @@ body.dark-theme .profile-container {
     text-align: center;
     color: #004d40;
     font-size: 20px;
+}
+
+@media (max-width: 600px) {
+    .total-time {
+        font-size: 18px;
+    }
+    .theme-switcher {
+        top: 14px;
+        right: 100px;
+    }
 }
