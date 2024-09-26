@@ -56,6 +56,17 @@ header {
     padding: 0 20px;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.uss-logo {
+    width: 30px;
+    height: 38px;
+    margin-right: 10px;
+}
+
 .logo a {
     text-decoration: none;
     color: var(--text-color);
@@ -246,7 +257,7 @@ button.toggle-btn {
 
 /* Перемикач теми */
 .theme-switcher {
-    position: fixed;
+    /*position: fixed;*/
     top: 20px;
     right: 20px;
     font-size: 30px;
@@ -382,6 +393,11 @@ body.dark-theme .profile-container {
         height: auto;
         margin-bottom: 20px;
         box-shadow: none; /* Приховуємо тінь для більш чистого вигляду */
+    }
+
+    .theme-switcher {
+        top: 14px;
+        right: 100px;
     }
 
     /* Зменшуємо padding основного контейнера */
