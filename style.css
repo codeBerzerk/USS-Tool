@@ -19,6 +19,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
 }
 
 body {
@@ -403,7 +404,7 @@ body.dark-theme .profile-container {
     /* Зменшуємо padding основного контейнера */
     .container {
         padding: 20px;
-        width: 90%;
+        width: 100%;
     }
 
     /* Перемикаємо навігацію вертикально */
@@ -512,11 +513,6 @@ body.dark-theme .profile-container {
     #saved-list li {
         font-size: 14px;
         padding: 8px;
-    }
-
-    /* Загальний відступ між елементами */
-    .container, .profile-container {
-        margin: 0 auto;
     }
 }
 
