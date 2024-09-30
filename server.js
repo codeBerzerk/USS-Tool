@@ -2,11 +2,13 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const sendSignalMessage = require('./sendSignal'); // Імпортуємо sendSignal.js
 const app = express();
 const port = 3000;
 
 // Налаштування CORS: дозволяємо всі домени
 app.use(cors());
+app.use(express.json()); // Для парсингу JSON-тіл POST-запитів
 
 // Маршрут для перевірки доступності сайту
 app.get('/checksite', async (req, res) => {
@@ -48,20 +50,35 @@ app.get('/checksite', async (req, res) => {
         return res.json({ status: response.status });
     } catch (error) {
         // Обробка помилок запиту
+        let status;
         if (error.response) {
             // Сервер відповів з кодом статусу, який не є 2xx
-            res.json({ status: error.response.status });
+            status = error.response.status;
         } else if (error.request) {
             // Запит був зроблений, але відповіді не отримано
-            res.json({ status: 'No Response' });
+            status = 'No Response';
         } else {
             // Виникла помилка при налаштуванні запиту
-            res.json({ status: 'Error', message: error.message });
+            status = 'Error';
         }
+
+        res.json({ status: status, message: error.message });
     }
 });
 
-// Запуск сервера
+// Додатковий маршрут для надсилання сповіщень
+app.post('/sendMessage', (req, res) => {
+    const { message } = req.body;
+
+    if (!message) {
+        return res.status(400).json({ error: 'Повідомлення не вказане' });
+    }
+
+    sendSignalMessage(message);
+    res.json({ success: true });
+});
+
+// Запуск серверу
 app.listen(port, () => {
     console.log(`Сервер запущено на порту ${port}`);
 });

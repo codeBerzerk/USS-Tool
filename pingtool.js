@@ -9,7 +9,7 @@
         const sites = [
             { name: "DMSU", url: "https://dmsu.gov.ua/" },
             { name: "MAIL DMSU", url: "https://mail.dmsu.gov.ua/mail/" },
-            { name: "MAIL DMSU", url: "https://rtg.dmsu.gov.ua" },
+            { name: "RTG DMSU", url: "https://rtg.dmsu.gov.ua" },
             { name: "NGU", url: "https://ngu.gov.ua/" },
             { name: "USS", url: "https://uss.gov.ua/" },
             { name: "RESTORATION", url: "https://restoration.gov.ua/" },
@@ -26,7 +26,6 @@
             siteFailures[site.name] = {
                 failures: 0,
                 firstFailureTime: null,
-                lastSuccessTime: null,
                 element: null,
                 notified: false // Додаємо прапорець для сповіщення
             };
@@ -44,6 +43,28 @@
                 return false;
             }
         }
+
+        // Функція для надсилання повідомлення через Signal
+        const sendSignalNotification = (message) => {
+            fetch('http://localhost:3000/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Повідомлення надіслано успішно через Signal.');
+                    } else {
+                        console.error('Не вдалося надіслати повідомлення через Signal.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Помилка при надсиланні повідомлення через Signal:', error);
+                });
+        };
 
         const checkSite = (site, index) => {
             const siteBlock = document.getElementById(`site_${index}`);
@@ -92,12 +113,25 @@
                 siteFailure.failures += 1;
 
                 if (checkSiteFailureThreshold(siteFailure.failures)) {
-                    updateErrorHistory(siteFailure.element, siteFailure.firstFailureTime, 'дотепер', 'red');
-                    triggerNotification(siteName);
+                    if (!siteFailure.notified) {
+                        updateErrorHistory(siteFailure.element, siteFailure.firstFailureTime, 'дотепер', 'red');
+                        triggerNotification(siteName);
+                        siteFailure.notified = true; // Позначаємо, що сповіщення надіслано
+
+                        // Надсилаємо повідомлення через Signal
+                        const message = `! Проблема ! Сайт ${siteName} недоступний з ${siteFailure.firstFailureTime.toLocaleTimeString()}`;
+
+                        sendSignalNotification(message);
+                    }
                 }
             } else {
-                if (siteFailure.failures >= 3) {
+                if (siteFailure.failures >= 3 && siteFailure.notified) {
+                    const duration = ((currentTime - siteFailure.firstFailureTime) / 60000).toFixed(1);
                     updateErrorHistory(siteFailure.element, siteFailure.firstFailureTime, currentTime, 'green');
+
+                    // Надсилаємо повідомлення про відновлення доступності
+                    const message = `! Відновлено ! Сайт ${siteName} знову доступний з ${currentTime.toLocaleTimeString()}. Час недоступності: ${duration} хвилин.`;
+                    sendSignalNotification(message);
                 }
                 siteFailure.failures = 0;
                 siteFailure.firstFailureTime = null;
@@ -117,7 +151,7 @@
 
         const updateErrorHistory = (element, startTime, endTime, color) => {
             if (color === 'green') {
-                element.textContent = `${element.textContent.split(':')[0]} : ${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()} (був недоступний ${((endTime - startTime) / 60000).toFixed(0)} хв)`;
+                element.textContent = `${element.textContent.split(':')[0]} : ${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()} (був недоступний ${((new Date(endTime) - startTime) / 60000).toFixed(1)} хв)`;
             } else {
                 element.textContent = `${element.textContent.split(':')[0]} : ${startTime.toLocaleTimeString()} - ${endTime}`;
             }
@@ -198,7 +232,6 @@
             Object.keys(siteFailures).forEach(siteName => {
                 siteFailures[siteName].failures = 0;
                 siteFailures[siteName].firstFailureTime = null;
-                siteFailures[siteName].lastSuccessTime = null;
                 siteFailures[siteName].element = null;
                 siteFailures[siteName].notified = false;
             });
