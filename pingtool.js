@@ -44,14 +44,28 @@
             }
         }
 
-        // Функція для надсилання повідомлення через Signal
-        const sendSignalNotification = (message) => {
+        // Функція для надсилання повідомлення через Signal з форматуванням
+        const sendSignalNotification = (message, isAlert = true) => {
+            const formattedMessage = isAlert
+                ? `Alert!!!!                                                                                            ${message}`
+                : `Solve!!!!                                                                                            ${message}`;
+
             fetch('http://localhost:3000/sendMessage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message })
+                body: JSON.stringify({
+                    message: formattedMessage,
+                    text_mode: "styled",
+                    textStyle: [
+                        {
+                            "start": 0,
+                            "length": 7,
+                            "style": "BOLD"
+                        }
+                    ]
+                })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -118,10 +132,9 @@
                         triggerNotification(siteName);
                         siteFailure.notified = true; // Позначаємо, що сповіщення надіслано
 
-                        // Надсилаємо повідомлення через Signal
-                        const message = `! Проблема ! Сайт ${siteName} недоступний з ${siteFailure.firstFailureTime.toLocaleTimeString()}`;
-
-                        sendSignalNotification(message);
+                        // Надсилаємо повідомлення через Signal з форматом "Alert!!!!"
+                        const message = `Сайт ${siteName} недоступний з ${siteFailure.firstFailureTime.toLocaleTimeString()}`;
+                        sendSignalNotification(message, true);
                     }
                 }
             } else {
@@ -129,9 +142,9 @@
                     const duration = ((currentTime - siteFailure.firstFailureTime) / 60000).toFixed(1);
                     updateErrorHistory(siteFailure.element, siteFailure.firstFailureTime, currentTime, 'green');
 
-                    // Надсилаємо повідомлення про відновлення доступності
-                    const message = `! Відновлено ! Сайт ${siteName} знову доступний з ${currentTime.toLocaleTimeString()}. Час недоступності: ${duration} хвилин.`;
-                    sendSignalNotification(message);
+                    // Надсилаємо повідомлення про відновлення доступності з форматом "Solve!!!!"
+                    const message = `Сайт ${siteName} знову доступний з ${currentTime.toLocaleTimeString()}. Час недоступності: ${duration} хвилин.`;
+                    sendSignalNotification(message, false);
                 }
                 siteFailure.failures = 0;
                 siteFailure.firstFailureTime = null;
