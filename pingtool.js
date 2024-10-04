@@ -47,8 +47,8 @@
         // Функція для надсилання повідомлення через Signal з форматуванням
         const sendSignalNotification = (message, isAlert = true) => {
             const formattedMessage = isAlert
-                ? `Alert!!!!                                                                                            ${message}`
-                : `Solve!!!!                                                                                            ${message}`;
+                ? `DOWN!                                                                                                    ${message}`
+                : `UP!                                                                                                      ${message}`;
 
             fetch('http://localhost:3000/sendMessage', {
                 method: 'POST',

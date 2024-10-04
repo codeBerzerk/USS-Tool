@@ -64,18 +64,19 @@ function sendSignalMessage(message) {
         });
     };
 
-    // Надсилання повідомлень користувачам
+// Надсилання повідомлень користувачам
     users.forEach(user => {
         if (user) {
-            const args = ['-a', sender, 'send', '-m', escapedMessage, user];
+            const args = ['-a', sender, 'send', '-m', escapedMessage, user, '--text-style', '0:5:BOLD'];
             runCommand(args, user);
         }
     });
 
+
     // Надсилання повідомлень групам
     groups.forEach(group => {
         if (group) {
-            const args = ['-a', sender, 'send', '-m', escapedMessage, '-g', group];
+            const args = ['-a', sender, 'send', '-m', escapedMessage, '-g', group, '--text-style', '0:5:BOLD'];
             runCommand(args, group);
         }
     });
