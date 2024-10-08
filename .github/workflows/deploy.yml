@@ -1,0 +1,44 @@
+name: Docker CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t codeberzerk/uss-tool .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push codeberzerk/uss-tool
+
+      - name: Deploy to VM via SSH
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          port: 9522
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull codeberzerk/uss-tool
+            docker stop uss-tool || true
+            docker rm uss-tool || true
+            docker run -d --name uss-tool -p 3000:3000 codeberzerk/uss-tool
