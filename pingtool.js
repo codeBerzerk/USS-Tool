@@ -50,7 +50,7 @@
                 ? `DOWN!                                                                                                    ${message}`
                 : `UP!                                                                                                      ${message}`;
 
-            fetch('http://localhost:3000/sendMessage', {
+            fetch('/api/sendMessage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -94,7 +94,7 @@
             }
 
             // Використовуємо серверний API для перевірки доступності сайту
-            fetch(`http://localhost:3000/checksite?url=${encodeURIComponent(site.url)}`)
+            fetch(`/api/checksite?url=${encodeURIComponent(site.url)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 200) {

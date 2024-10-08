@@ -20,8 +20,8 @@ const logger = winston.createLogger({
 });
 
 // Вкажіть абсолютний шлях до signal-cli
-const pathToSignalCli = 'E:\\Users\\Lenovo\\Desktop\\signal-cli-0.13.7\\bin\\signal-cli.bat'; // Замініть на ваш шлях
-
+// const pathToSignalCli = 'E:\\Users\\Lenovo\\Desktop\\signal-cli-0.13.7\\bin\\signal-cli.bat'; НА ЛОКАЛІ
+const pathToSignalCli = '/usr/local/bin/signal-cli'; // НА ВМ
 /**
  * Функція для надсилання повідомлення через Signal
  * @param {string} message - Текст повідомлення

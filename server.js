@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json()); // Для парсингу JSON-тіл POST-запитів
 
 // Маршрут для перевірки доступності сайту
-app.get('/checksite', async (req, res) => {
+app.get('/api/checksite', async (req, res) => {
     const { url } = req.query;
 
     // Перевірка наявності параметра url
@@ -67,7 +67,7 @@ app.get('/checksite', async (req, res) => {
 });
 
 // Додатковий маршрут для надсилання сповіщень
-app.post('/sendMessage', (req, res) => {
+app.post('/api/sendMessage', (req, res) => {
     const { message } = req.body;
 
     if (!message) {
