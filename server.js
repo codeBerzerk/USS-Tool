@@ -13,58 +13,62 @@ app.use(express.json()); // Для парсингу JSON-тіл POST-запит�
 // Маршрут для перевірки доступності сайту
 app.get('/api/checksite', async (req, res) => {
     const { url } = req.query;
+    console.log('Received URL:', url);
 
-    // Перевірка наявності параметра url
     if (!url) {
+        console.error('URL parameter is missing');
         return res.status(400).json({ error: 'Відсутній параметр URL' });
     }
 
-    // Перевірка валідності URL
     try {
         new URL(url);
     } catch (err) {
+        console.error('Invalid URL:', url);
         return res.status(400).json({ error: 'Некоректний URL' });
     }
 
     try {
         const response = await axios.get(url, {
-            timeout: 5000, // Таймаут запиту
-            maxRedirects: 0, // Забороняємо слідувати за редиректами
+            timeout: 5000,
+            maxRedirects: 0,
             validateStatus: function (status) {
-                return true; // Дозволяємо обробляти всі статус-коди
+                return true;
+            },
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
             }
         });
 
-        // Якщо статус-код не в діапазоні 200-299, повертаємо його
+        console.log(`Response status for ${url}:`, response.status);
+
         if (response.status < 200 || response.status >= 300) {
             return res.json({ status: response.status });
         }
 
-        // Перевіряємо вміст відповіді на наявність типових повідомлень про помилки
         const bodyContent = typeof response.data === 'string' ? response.data.toLowerCase() : JSON.stringify(response.data).toLowerCase();
         if (bodyContent.includes('403 forbidden') || bodyContent.includes('access denied')) {
             return res.json({ status: 403 });
         }
 
-        // Якщо все гаразд
         return res.json({ status: response.status });
     } catch (error) {
-        // Обробка помилок запиту
+        console.error('Error fetching URL:', error.message);
+
         let status;
         if (error.response) {
-            // Сервер відповів з кодом статусу, який не є 2xx
             status = error.response.status;
         } else if (error.request) {
-            // Запит був зроблений, але відповіді не отримано
             status = 'No Response';
         } else {
-            // Виникла помилка при налаштуванні запиту
             status = 'Error';
         }
 
         res.json({ status: status, message: error.message });
     }
 });
+
 
 // Додатковий маршрут для надсилання сповіщень
 app.post('/api/sendMessage', (req, res) => {

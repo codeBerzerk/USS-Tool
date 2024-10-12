@@ -9,8 +9,18 @@
         const sites = [
             { name: "DMSU", url: "https://dmsu.gov.ua/" },
             { name: "MAIL DMSU", url: "https://mail.dmsu.gov.ua/mail/" },
-            { name: "RTG DMSU", url: "https://rtg.dmsu.gov.ua" },
+            { name: "RTG DMSU", url: "https://rtg.dmsu.gov.ua/home" },
+            { name: "RM DMSU", url: "https://readmission.dmsu.gov.ua/" },
+            { name: "SDN DMSU", url: "https://sdn.dmsu.gov.ua/login" },
+            { name: "STAT DMSU", url: "https://stat.dmsu.gov.ua" },
+            { name: "ESEC DMSU", url: "https://esec.dsecu.gov.ua/" },
+            { name: "ASEC DMSU", url: "https://asec.dsecu.gov.ua/" },
+
+
             { name: "NGU", url: "https://ngu.gov.ua/" },
+            { name: "JOIN NGU", url: "https://join.ngu.gov.ua/" },
+
+            { name: "TREASURY", url: "https://www.treasury.gov.ua/" },
             { name: "USS", url: "https://uss.gov.ua/" },
             { name: "RESTORATION", url: "https://restoration.gov.ua/" },
             { name: "PROMETHEUS", url: "https://prometheus.io/" },

@@ -207,6 +207,7 @@ h1 {
 h2 {
     color: #006064;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 600px) {
@@ -276,8 +277,8 @@ button.toggle-btn {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 15px;
-    margin-bottom: 10px;
+    padding: 10px;
+    /*margin-bottom: 10px;*/
     color: var(--text-color);
     border-radius: 8px;
     background-color: var(--entry-bg);
@@ -305,9 +306,10 @@ select {
     max-width: 200px;
 }
 
-/* Стилі для списку сайтів */
-#sitesList .site-block {
-    /*background-color: var(--entry-bg);*/
+#sitesList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Дві колонки */
+    gap: 10px; /* Відстань між плитками */
 }
 
 /* Стилі для сповіщень */
@@ -341,6 +343,11 @@ select {
 
 #sitesList .site-block button {
     margin-top: 10px;
+}
+
+.site-block strong {
+    font-weight: bold;
+    font-size: 35px;
 }
 
 /* Інші стилі */
@@ -385,6 +392,12 @@ body.dark-theme .profile-container {
 #saved-list li:hover {
     transform: scale(1.05);
     background-color: var(--entry-hover-bg);
+}
+
+@media (min-width: 1200px) {
+    #sitesList {
+        grid-template-columns: repeat(4, 1fr); /* Чотири колонки */
+    }
 }
 
 @media (max-width: 800px) {
